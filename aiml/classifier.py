@@ -8,7 +8,6 @@ load_dotenv()
 API_KEY = os.getenv("GROQ_API_KEY")
 
 URL = "https://api.groq.com/openai/v1/chat/completions"
-print("API KEY:", API_KEY)
 
 
 SYSTEM_PROMPT = """
@@ -55,7 +54,7 @@ def call_llm(user_prompt: str):
 
     response = requests.post(URL, headers=headers, json=payload)
 
-    print("RAW RESPONSE:", response.text)
+    # print("RAW RESPONSE:", response.text)
 
     return response.json()
 
