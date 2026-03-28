@@ -76,3 +76,6 @@ cover/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+# Others
+guides/

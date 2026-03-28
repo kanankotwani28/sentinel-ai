@@ -1,7 +1,10 @@
+import os
 import faiss
 import numpy as np
 import json
-from services.embedding_services import get_embedding
+from .embedding_services import get_embedding
+
+_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
 dimension = 384
 index = faiss.IndexFlatL2(dimension)
@@ -9,7 +12,7 @@ index = faiss.IndexFlatL2(dimension)
 stored_prompts = []
 
 def load_data():
-    with open("data/jailbreak_samples.json") as f:
+    with open(os.path.join(_DATA_DIR, "jailbreak_samples.json")) as f:
         data = json.load(f)
 
     for p in data:

@@ -1,5 +1,5 @@
-from services.embedding_services import get_embedding
-from services.vector_store import search_similar
+from .services.embedding_services import get_embedding
+from .services.vector_store import search_similar
 
 def check_anomaly(prompt: str):
     emb = get_embedding(prompt)

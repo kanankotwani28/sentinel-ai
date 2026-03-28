@@ -1,6 +1,6 @@
-from classifier import classify_prompt
-from patterns import detect_patterns
-from anomaly import check_anomaly
+from .classifier import classify_prompt
+from .patterns import detect_patterns
+from .anomaly import check_anomaly
 
 
 def analyze_prompt(prompt: str):
