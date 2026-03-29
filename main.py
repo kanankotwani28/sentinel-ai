@@ -33,6 +33,15 @@ class PromptRequest(BaseModel):
     prompt: str
 
 
+def validate_prompt(prompt: str) -> tuple:
+    """Validate input prompt. Returns (is_valid: bool, error_message: str)."""
+    if not prompt or not prompt.strip():
+        return False, "Prompt cannot be empty"
+    if len(prompt) > 10000:
+        return False, "Prompt exceeds 10,000 character limit"
+    return True, ""
+
+
 @app.get("/")
 async def health_check():
     return {"status": "ok", "service": "sentinel-ai"}
@@ -44,8 +53,17 @@ async def analyze(request: PromptRequest):
     Analyze a user prompt for jailbreak / adversarial intent.
 
     Returns a verdict with status (ALLOWED | BLOCKED | SUSPICIOUS),
-    confidence, risk_score, detected patterns, and reasoning.
+    confidence, and reasoning.
     """
+    is_valid, error = validate_prompt(request.prompt)
+    if not is_valid:
+        return {
+            "status": "ALLOWED",
+            "confidence": 0.0,
+            "category": "validation_error",
+            "reason": error
+        }
+    
     result = analyze_prompt(request.prompt)
 
     # Update demo stats

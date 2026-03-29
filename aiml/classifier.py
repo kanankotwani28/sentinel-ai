@@ -1,11 +1,16 @@
 import requests
 import json
 import os
+import sys
 from dotenv import load_dotenv
 
 load_dotenv()
 
 API_KEY = os.getenv("GROQ_API_KEY")
+
+if not API_KEY:
+    print("ERROR: GROQ_API_KEY not found in .env file")
+    sys.exit(1)
 
 URL = "https://api.groq.com/openai/v1/chat/completions"
 

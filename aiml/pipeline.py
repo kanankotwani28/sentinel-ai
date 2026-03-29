@@ -60,16 +60,10 @@ def analyze_prompt(prompt: str):
     # --- Self-Learning: Remember blocked prompts that aren't already very familiar ---
     if status == "BLOCKED" and attack_similarity < 0.90:
         add_new_attack(prompt)
-        
-    process_time_ms = int((time.time() - start_time) * 1000)
 
     return {
         "status": status,
         "confidence": round(float(confidence), 2),
-        "risk_score": round(float(risk_score), 2),
         "category": label,
-        "patterns": patterns,
-        "anomaly": bool(anomaly.get("is_threat", False)),
         "reason": reason,
-        "processing_time_ms": process_time_ms,
     }
