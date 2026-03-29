@@ -12,7 +12,7 @@ index = faiss.IndexFlatL2(dimension)
 stored_prompts = []
 
 def load_data():
-    with open(os.path.join(_DATA_DIR, "jailbreak_samples.json")) as f:
+    with open(os.path.join(_DATA_DIR, "jailbreak_attacks.json")) as f:
         data = json.load(f)
 
     for p in data:
