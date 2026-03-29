@@ -1,9 +1,12 @@
+import time
 from .classifier import classify_prompt
 from .patterns import detect_patterns
 from .anomaly import check_anomaly
+from .services.vector_store import add_new_attack
 
 
 def analyze_prompt(prompt: str):
+    start_time = time.time()
     clf = classify_prompt(prompt)
     patterns = detect_patterns(prompt)
     anomaly = check_anomaly(prompt)
@@ -54,6 +57,12 @@ def analyze_prompt(prompt: str):
     else:
         status = "ALLOWED"
 
+    # --- Self-Learning: Remember blocked prompts that aren't already very familiar ---
+    if status == "BLOCKED" and attack_similarity < 0.90:
+        add_new_attack(prompt)
+        
+    process_time_ms = int((time.time() - start_time) * 1000)
+
     return {
         "status": status,
         "confidence": round(float(confidence), 2),
@@ -62,4 +71,5 @@ def analyze_prompt(prompt: str):
         "patterns": patterns,
         "anomaly": bool(anomaly.get("is_threat", False)),
         "reason": reason,
+        "processing_time_ms": process_time_ms,
     }

@@ -24,6 +24,11 @@ def add_prompt(embedding, text):
     index.add(np.array([embedding]).astype('float32'))
     stored_prompts.append(text)
 
+def add_new_attack(text):
+    # Dynamically inject newly discovered attacks into FAISS memory
+    emb = get_embedding(text)
+    add_prompt(emb, text)
+
 def search_similar(embedding, k=1):
     if index.ntotal == 0:
         return None, None

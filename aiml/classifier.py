@@ -53,16 +53,25 @@ def call_llm(user_prompt: str):
         "Content-Type": "application/json"
     }
 
-    response = requests.post(URL, headers=headers, json=payload)
-
-    # print("RAW RESPONSE:", response.text)
-
-    return response.json()
+    try:
+        response = requests.post(URL, headers=headers, json=payload, timeout=5)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"LLM API Call Failed: {e}")
+        return {"error": str(e)}
 
 def classify_prompt(prompt: str):
 
     result_dict = call_llm(prompt)
     
+    if "error" in result_dict:
+        return {
+            "label": "unknown",
+            "confidence": 0.0,
+            "reason": f"LLM evaluation failed ({result_dict['error']}). Relying on pattern rules and vectors."
+        }
+        
     if "choices" in result_dict and len(result_dict["choices"]) > 0:
         result = result_dict["choices"][0]["message"]["content"]
     else:
